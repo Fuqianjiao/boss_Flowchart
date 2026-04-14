@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>BOSS直聘 HR招聘 RPA 自动化流程图</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    background: #f5f4ef;
+    color: #1a1a18;
+    min-height: 100vh;
+    padding: 32px 20px 60px;
+  }
+
+  .page-header {
+    max-width: 900px;
+    margin: 0 auto 28px;
+  }
+  .page-header h1 {
+    font-size: 20px;
+    font-weight: 500;
+    color: #1a1a18;
+    margin-bottom: 6px;
+  }
+  .page-header p {
+    font-size: 13px;
+    color: #73726c;
+    line-height: 1.6;
+  }
+
+  .card {
+    max-width: 900px;
+    margin: 0 auto;
+    background: #ffffff;
+    border: 0.5px solid #d3d1c7;
+    border-radius: 14px;
+    padding: 24px 28px 32px;
+  }
+
+  .tab-bar {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 24px;
+    padding: 4px;
+    background: #f1efe8;
+    border-radius: 10px;
+  }
+  .tab-btn {
+    flex: 1;
+    padding: 9px 0;
+    border: none;
+    background: transparent;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 500;
+    color: #73726c;
+    cursor: pointer;
+    transition: all .2s;
+    font-family: inherit;
+  }
+  .tab-btn:hover { color: #1a1a18; }
+  .tab-btn.active {
+    background: #ffffff;
+    color: #1a1a18;
+    border: 0.5px solid #d3d1c7;
+  }
+
+  .tab-pane { display: none; }
+  .tab-pane.active { display: block; }
+
+  svg { display: block; width: 100%; }
+
+  .nav-btns {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 20px;
+  }
+  .nav-btn {
+    font-size: 13px;
+    padding: 8px 20px;
+    cursor: pointer;
+    color: #5f5e5a;
+    background: #f1efe8;
+    border: 0.5px solid #b4b2a9;
+    border-radius: 8px;
+    font-family: inherit;
+    transition: all .15s;
+  }
+  .nav-btn:hover { background: #e8e6df; color: #1a1a18; }
+
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px 24px;
+    margin-top: 24px;
+    padding: 12px 16px;
+    background: #f1efe8;
+    border-radius: 8px;
+    border: 0.5px solid #d3d1c7;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 12px;
+    color: #5f5e5a;
+  }
+  .l-dot {
+    width: 12px; height: 12px;
+    border-radius: 3px;
+    flex-shrink: 0;
+  }
+  .l-line {
+    width: 28px; height: 1.5px;
+    background: #b4b2a9;
+    background-image: repeating-linear-gradient(90deg,#b4b2a9 0,#b4b2a9 5px,transparent 5px,transparent 9px);
+    flex-shrink: 0;
+  }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <h1>BOSS直聘 HR招聘 RPA 自动化流程</h1>
+  <p>包含主动打招呼（AI评分筛选）与被动接收简历两条路径，邮箱收到简历后回到BOSS平台进行每日巡检</p>
+</div>
+
+<div class="card">
+  <div class="tab-bar">
+    <button class="tab-btn active" onclick="switchTab('main',this)">主流程总览</button>
+    <button class="tab-btn" onclick="switchTab('active',this)">主动打招呼场景</button>
+    <button class="tab-btn" onclick="switchTab('passive',this)">被动打招呼场景</button>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════ 主流程 -->
+  <div id="pane-main" class="tab-pane active">
+    <svg viewBox="0 0 840 860" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </marker>
+      </defs>
+
+      <!-- 开始 -->
+      <rect x="320" y="20" width="200" height="38" rx="19" fill="#f1efe8" stroke="#888780" stroke-width="0.5"/>
+      <text x="420" y="39" text-anchor="middle" dominant-baseline="central" font-size="14" font-weight="500" fill="#444441">开始招聘</text>
+
+      <line x1="420" y1="58" x2="420" y2="86" stroke="#888780" stroke-width="1.2" marker-end="url(#arr)"/>
+
+      <!-- A95 AI分析 -->
+      <rect x="100" y="86" width="640" height="84" rx="12" fill="#eeedfe" stroke="#534ab7" stroke-width="0.5"/>
+      <text x="420" y="114" text-anchor="middle" dominant-baseline="central" font-size="14" font-weight="500" fill="#3c3489">① AI分析候选人打分（A95）</text>
+      <text x="420" y="136" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#534ab7">在线简历 + JD + 附加条件 → AI综合打分（0–100分）</text>
+      <text x="420" y="156" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#534ab7">点击「主动打招呼场景」查看详情 →</text>
+      <rect x="688" y="92" width="44" height="20" rx="6" fill="#534ab7" stroke="none"/>
+      <text x="710" y="102" text-anchor="middle" dominant-baseline="central" font-size="11" fill="#eeedfe">A95</text>
+
+      <line x1="420" y1="170" x2="420" y2="198" stroke="#888780" stroke-width="1.2" marker-end="url(#arr)"/>
+
+      <!-- 评分判断 -->
+      <rect x="250" y="198" width="340" height="56" rx="8" fill="#faeeda" stroke="#854f0b" stroke-width="0.5"/>
+      <text x="420" y="221" text-anchor="middle" dominant-baseline="central" font-size="14" font-weight="500" fill="#633806">AI评分 ≥ 80 分？</text>
+      <text x="420" y="241" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#854f0b">低于80分不进行沟通</text>
+
+      <!-- 否 →右 -->
+      <path d="M590 226 L680 226" fill="none" stroke="#888780" stroke-width="1.2" stroke-dasharray="5 4" marker-end="url(#arr)"/>
+      <text x="633" y="218" text-anchor="middle" font-size="12" fill="#888780">否</text>
+      <rect x="680" y="206" width="100" height="40" rx="8" fill="#f1efe8" stroke="#888780" stroke-width="0.5"/>
+      <text x="730" y="226" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#5f5e5a">跳过归档</text>
+
+      <line x1="420" y1="254" x2="420" y2="282" stroke="#888780" stroke-width="1.2" marker-end="url(#arr)"/>
+      <text x="434" y="271" font-size="12" fill="#888780">是 ≥ 80</text>
+
+      <!-- 主动打招呼 -->
+      <rect x="100" y="282" width="640" height="64" rx="12" fill="#eeedfe" stroke="#534ab7" stroke-width="0.5"/>
+      <text x="420" y="308" text-anchor="middle" dominant-baseline="central" font-size="14" font-weight="500" fill="#3c3489">② RPA打招呼 + 获取简历（A95 / A96）</text>
+      <text x="420" y="330" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#534ab7">按主动/被动场景分支处理（见各 Tab）</text>
+
+      <line x1="420" y1="346" x2="420" y2="374" stroke="#888780" stroke-width="1.2" marker-end="url(#arr)"/>
+
+      <!-- 邮箱 -->
+      <rect x="270" y="374" width="300" height="42" rx="8" fill="#faeeda" stroke="#854f0b" stroke-width="0.5"/>
+      <text x="420" y="395" text-anchor="middle" dominant-baseline="central" font-size="14" font-weight="500" fill="#633806">邮箱接收到简历</text>
+
+      <line x1="420" y1="416" x2="420" y2="444" stroke="#888780" stroke-width="1.2" marker-end="url(#arr)"/>
+
+      <!-- 巡检 -->
+      <rect x="100" y="444" width="640" height="86" rx="12" fill="#e1f5ee" stroke="#0f6e56" stroke-width="0.5"/>
+      <text x="420" y="470" text-anchor="middle" dominant-baseline="central" font-size="14" font-weight="500" fill="#085041">③ 回到BOSS平台进行巡检（A96）</text>
+      <text x="420" y="492" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#0f6e56">筛选条件：已打招呼 + 该候选人已发送简历</text>
+      <text x="420" y="512" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#0f6e56">每天不定时，回复固定感谢话术</text>
+      <rect x="688" y="450" width="44" height="20" rx="6" fill="#0f6e56" stroke="none"/>
+      <text x="710" y="460" text-anchor="middle" dominant-baseline="central" font-size="11" fill="#e1f5ee">A96</text>
+      <!-- 触发说明 -->
+      <rect x="6" y="466" width="88" height="42" rx="6" fill="none" stroke="#b4b2a9" stroke-width="0.5" stroke-dasharray="4 3"/>
+      <text x="50" y="481" text-anchor="middle" font-size="11" fill="#888780">邮箱收到</text>
+      <text x="50" y="497" text-anchor="middle" font-size="11" fill="#888780">简历后触发</text>
+
+      <line x1="420" y1="530" x2="420" y2="558" stroke="#888780" stroke-width="1.2" marker-end="url(#arr)"/>
+
+      <!-- A20 EHR -->
+      <rect x="100" y="558" width="640" height="64" rx="12" fill="#faece7" stroke="#993c1d" stroke-width="0.5"/>
+      <text x="420" y="584" text-anchor="middle" dominant-baseline="central" font-size="14" font-weight="500" fill="#712b13">④ 录入乐其人才库 / EHR（A20）</text>
+      <text x="420" y="606" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#993c1d">RPA从邮箱读取简历，自动录入EHR系统</text>
+      <rect x="688" y="564" width="44" height="20" rx="6" fill="#993c1d" stroke="none"/>
+      <text x="710" y="574" text-anchor="middle" dominant-baseline="central" font-size="11" fill="#faece7">A20</text>
+
+      <line x1="420" y1="622" x2="420" y2="650" stroke="#888780" stroke-width="1.2" marker-end="url(#arr)"/>
+
+      <!-- 结束 -->
+      <rect x="320" y="650" width="200" height="38" rx="19" fill="#f1efe8" stroke="#888780" stroke-width="0.5"/>
+      <text x="420" y="669" text-anchor="middle" dominant-baseline="central" font-size="14" font-weight="500" fill="#444441">录入完成</text>
+
+      <!-- 被动场景入口 -->
+      <rect x="60" y="728" width="720" height="56" rx="12" fill="#fbeaf0" stroke="#993556" stroke-width="0.5" stroke-dasharray="6 3"/>
+      <text x="420" y="749" text-anchor="middle" dominant-baseline="central" font-size="14" font-weight="500" fill="#72243e">候选人主动打招呼（被动接收）— 独立入口</text>
+      <text x="420" y="769" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#993556">AI分析简历评分 → 分数 ≥ 80 才回复 → 对方发简历点同意 → 进入邮箱 → 巡检 → EHR　　点击「被动打招呼场景」查看详情 →</text>
+
+      <!-- 分隔线 -->
+      <line x1="60" y1="710" x2="780" y2="710" stroke="#d3d1c7" stroke-width="0.5" stroke-dasharray="4 3"/>
+    </svg>
+
+    <div class="legend">
+      <div class="legend-item"><span class="l-dot" style="background:#eeedfe;border:1px solid #534ab7"></span>BOSS平台操作（A95）</div>
+      <div class="legend-item"><span class="l-dot" style="background:#e1f5ee;border:1px solid #0f6e56"></span>巡检回复（A96）</div>
+      <div class="legend-item"><span class="l-dot" style="background:#faece7;border:1px solid #993c1d"></span>EHR录入（A20）</div>
+      <div class="legend-item"><span class="l-dot" style="background:#faeeda;border:1px solid #854f0b"></span>判断 / 中转节点</div>
+      <div class="legend-item"><span class="l-dot" style="background:#fbeaf0;border:1px solid #993556"></span>被动场景</div>
+      <div class="legend-item"><span class="l-dot" style="background:#f1efe8;border:1px solid #888780"></span>开始 / 结束 / 归档</div>
+      <div class="legend-item"><span class="l-line"></span>旁路 / 跳过</div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════ 主动场景 -->
+  <div id="pane-active" class="tab-pane">
+    <svg viewBox="0 0 840 660" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="arr2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </marker>
+      </defs>
+
+      <!-- 入口 -->
+      <rect x="220" y="20" width="400" height="52" rx="12" fill="#eeedfe" stroke="#534ab7" stroke-width="0.5"/>
+      <text x="420" y="46" text-anchor="middle" dominant-baseline="central" font-size="14" font-weight="500" fill="#3c3489">RPA主动打招呼（A95）</text>
+      <rect x="576" y="26" width="44" height="20" rx="6" fill="#534ab7" stroke="none"/>
+      <text x="598" y="36" text-anchor="middle" dominant-baseline="central" font-size="11" fill="#eeedfe">A95</text>
+
+      <line x1="420" y1="72" x2="420" y2="100" stroke="#888780" stroke-width="1.2" marker-end="url(#arr2)"/>
+
+      <!-- 附件简历判断 -->
+      <rect x="200" y="100" width="440" height="56" rx="8" fill="#faeeda" stroke="#854f0b" stroke-width="0.5"/>
+      <text x="420" y="122" text-anchor="middle" dominant-baseline="central" font-size="14" font-weight="500" fill="#633806">附件简历可点击？</text>
+      <text x="420" y="142" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#854f0b">灰色 = 不可点击，进入回复情况判断</text>
+
+      <!-- 可点击 → 右 -->
+      <path d="M640 128 L730 128 L730 224" fill="none" stroke="#888780" stroke-width="1.2" marker-end="url(#arr2)"/>
+      <text x="683" y="119" text-anchor="middle" font-size="12" fill="#888780">可点击</text>
+      <rect x="676" y="224" width="120" height="46" rx="8" fill="#eaf3de" stroke="#3b6d11" stroke-width="0.5"/>
+      <text x="736" y="241" text-anchor="middle" dominant-baseline="central" font-size="13" font-weight="500" fill="#27500a">直接点击</text>
+      <text x="736" y="259" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#3b6d11">求简历</text>
+      <path d="M736 270 L736 374 L540 374" fill="none" stroke="#888780" stroke-width="1.2" marker-end="url(#arr2)"/>
+
+      <!-- 不可点击 → 下 -->
+      <line x1="420" y1="156" x2="420" y2="184" stroke="#888780" stroke-width="1.2" marker-end="url(#arr2)"/>
+      <text x="434" y="173" font-size="12" fill="#888780">不可点击</text>
+
+      <!-- 三情形判断 -->
+      <rect x="196" y="184" width="448" height="56" rx="8" fill="#f1efe8" stroke="#888780" stroke-width="0.5"/>
+      <text x="420" y="206" text-anchor="middle" dominant-baseline="central" font-size="14" font-weight="500" fill="#444441">对方回复情况？</text>
+      <text x="420" y="226" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#5f5e5a">逐一判断三种场景</text>
+
+      <!-- 情形① 已回复 → 左 -->
+      <path d="M196 212 L90 212 L90 294" fill="none" stroke="#888780" stroke-width="1.2" marker-end="url(#arr2)"/>
+      <text x="138" y="203" text-anchor="middle" font-size="12" fill="#888780">①已回复</text>
+      <rect x="30" y="294" width="124" height="56" rx="8" fill="#e1f5ee" stroke="#0f6e56" stroke-width="0.5"/>
+      <text x="92" y="316" text-anchor="middle" dominant-baseline="central" font-size="13" font-weight="500" fill="#085041">点击求简历</text>
+      <text x="92" y="336" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#0f6e56">等待对方发送</text>
+      <path d="M92 350 L92 374 L200 374" fill="none" stroke="#888780" stroke-width="1.2" marker-end="url(#arr2)"/>
+
+      <!-- 情形② 主动发简历 → 中 -->
+      <line x1="420" y1="240" x2="420" y2="294" stroke="#888780" stroke-width="1.2" marker-end="url(#arr2)"/>
+      <text x="434" y="269" font-size="12" fill="#888780">②主动发简历</text>
+      <rect x="308" y="294" width="224" height="56" rx="8" fill="#e1f5ee" stroke="#0f6e56" stroke-width="0.5"/>
+      <text x="420" y="316" text-anchor="middle" dominant-baseline="central" font-size="13" font-weight="500" fill="#085041">点击同意接收</text>
+      <text x="420" y="336" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#0f6e56">简历自动进入邮箱</text>
+      <line x1="420" y1="350" x2="420" y2="374" stroke="#888780" stroke-width="1.2" marker-end="url(#arr2)"/>
+
+      <!-- 情形③ 未回复 → 右 -->
+      <path d="M644 212 L740 212 L740 294" fill="none" stroke="#888780" stroke-width="1.2" stroke-dasharray="5 4" marker-end="url(#arr2)"/>
+      <text x="694" y="203" text-anchor="middle" font-size="12" fill="#888780">③未回复</text>
+      <rect x="686" y="294" width="116" height="56" rx="8" fill="#f1efe8" stroke="#888780" stroke-width="0.5"/>
+      <text x="744" y="316" text-anchor="middle" dominant-baseline="central" font-size="13" font-weight="500" fill="#444441">跳过</text>
+      <text x="744" y="336" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#5f5e5a">不做操作</text>
+
+      <!-- 汇入邮箱 -->
+      <rect x="200" y="374" width="340" height="42" rx="8" fill="#faeeda" stroke="#854f0b" stroke-width="0.5"/>
+      <text x="370" y="395" text-anchor="middle" dominant-baseline="central" font-size="14" font-weight="500" fill="#633806">邮箱接收到简历</text>
+
+      <line x1="370" y1="416" x2="370" y2="444" stroke="#888780" stroke-width="1.2" marker-end="url(#arr2)"/>
+
+      <!-- 巡检 -->
+      <rect x="80" y="444" width="680" height="86" rx="12" fill="#e1f5ee" stroke="#0f6e56" stroke-width="0.5"/>
+      <text x="420" y="470" text-anchor="middle" dominant-baseline="central" font-size="14" font-weight="500" fill="#085041">回到BOSS平台进行巡检（A96）</text>
+      <text x="420" y="492" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#0f6e56">筛选条件：已打招呼 + 该候选人已发送简历</text>
+      <text x="420" y="512" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#0f6e56">每天不定时，回复固定感谢话术</text>
+      <rect x="710" y="450" width="44" height="20" rx="6" fill="#0f6e56" stroke="none"/>
+      <text x="732" y="460" text-anchor="middle" dominant-baseline="central" font-size="11" fill="#e1f5ee">A96</text>
+
+      <line x1="420" y1="530" x2="420" y2="558" stroke="#888780" stroke-width="1.2" marker-end="url(#arr2)"/>
+
+      <!-- A20 -->
+      <rect x="180" y="558" width="480" height="46" rx="12" fill="#faece7" stroke="#993c1d" stroke-width="0.5"/>
+      <text x="420" y="581" text-anchor="middle" dominant-baseline="central" font-size="14" font-weight="500" fill="#712b13">录入乐其人才库 / EHR（A20）</text>
+      <rect x="616" y="564" width="44" height="20" rx="6" fill="#993c1d" stroke="none"/>
+      <text x="638" y="574" text-anchor="middle" dominant-baseline="central" font-size="11" fill="#faece7">A20</text>
+    </svg>
+    <div class="nav-btns">
+      <button class="nav-btn" onclick="switchTab('main',document.querySelectorAll('.tab-btn')[0])">← 主流程总览</button>
+      <button class="nav-btn" onclick="switchTab('passive',document.querySelectorAll('.tab-btn')[2])">被动打招呼场景 →</button>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════ 被动场景 -->
+  <div id="pane-passive" class="tab-pane">
+    <svg viewBox="0 0 840 680" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="arr3" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </marker>
+      </defs>
+
+      <!-- 入口 -->
+      <rect x="200" y="20" width="440" height="52" rx="12" fill="#fbeaf0" stroke="#993556" stroke-width="0.5"/>
+      <text x="420" y="46" text-anchor="middle" dominant-baseline="central" font-size="14" font-weight="500" fill="#72243e">候选人主动打招呼（被动接收）</text>
+
+      <line x1="420" y1="72" x2="420" y2="100" stroke="#888780" stroke-width="1.2" marker-end="url(#arr3)"/>
+
+      <!-- AI分析简历 -->
+      <rect x="140" y="100" width="560" height="86" rx="12" fill="#eeedfe" stroke="#534ab7" stroke-width="0.5"/>
+      <text x="420" y="126" text-anchor="middle" dominant-baseline="central" font-size="14" font-weight="500" fill="#3c3489">AI分析在线简历打分（A95）</text>
+      <text x="420" y="148" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#534ab7">在线简历 + JD + 附加条件 → AI综合打分（0–100分）</text>
+      <text x="420" y="168" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#534ab7">判断候选人是否符合要求</text>
+      <rect x="650" y="106" width="44" height="20" rx="6" fill="#534ab7" stroke="none"/>
+      <text x="672" y="116" text-anchor="middle" dominant-baseline="central" font-size="11" fill="#eeedfe">A95</text>
+
+      <line x1="420" y1="186" x2="420" y2="214" stroke="#888780" stroke-width="1.2" marker-end="url(#arr3)"/>
+
+      <!-- 评分判断 -->
+      <rect x="250" y="214" width="340" height="56" rx="8" fill="#faeeda" stroke="#854f0b" stroke-width="0.5"/>
+      <text x="420" y="236" text-anchor="middle" dominant-baseline="central" font-size="14" font-weight="500" fill="#633806">AI评分 ≥ 80 分？</text>
+      <text x="420" y="256" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#854f0b">低于80分不回复，结束流程</text>
+
+      <!-- 否 → 右 -->
+      <path d="M590 242 L700 242 L700 294" fill="none" stroke="#888780" stroke-width="1.2" stroke-dasharray="5 4" marker-end="url(#arr3)"/>
+      <text x="648" y="233" text-anchor="middle" font-size="12" fill="#888780">否 &lt; 80</text>
+      <rect x="648" y="294" width="128" height="46" rx="8" fill="#f1efe8" stroke="#888780" stroke-width="0.5"/>
+      <text x="712" y="311" text-anchor="middle" dominant-baseline="central" font-size="13" font-weight="500" fill="#444441">不回复</text>
+      <text x="712" y="329" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#5f5e5a">结束流程</text>
+
+      <!-- 是 ≥80 → 下 回复消息 -->
+      <line x1="420" y1="270" x2="420" y2="298" stroke="#888780" stroke-width="1.2" marker-end="url(#arr3)"/>
+      <text x="434" y="287" font-size="12" fill="#888780">是 ≥ 80</text>
+
+      <!-- 回复消息 -->
+      <rect x="220" y="298" width="400" height="56" rx="12" fill="#eeedfe" stroke="#534ab7" stroke-width="0.5"/>
+      <text x="420" y="320" text-anchor="middle" dominant-baseline="central" font-size="14" font-weight="500" fill="#3c3489">回复消息给候选人</text>
+      <text x="420" y="340" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#534ab7">发送回复话术，与候选人建立沟通</text>
+
+      <line x1="420" y1="354" x2="420" y2="382" stroke="#888780" stroke-width="1.2" marker-end="url(#arr3)"/>
+
+      <!-- 对方是否发简历 -->
+      <rect x="220" y="382" width="400" height="56" rx="8" fill="#faeeda" stroke="#854f0b" stroke-width="0.5"/>
+      <text x="420" y="404" text-anchor="middle" dominant-baseline="central" font-size="14" font-weight="500" fill="#633806">对方是否发送简历？</text>
+      <text x="420" y="422" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#854f0b">等待候选人发送简历附件</text>
+
+      <!-- 否 -->
+      <path d="M620 410 L700 410" fill="none" stroke="#888780" stroke-width="1.2" stroke-dasharray="5 4" marker-end="url(#arr3)"/>
+      <text x="658" y="401" text-anchor="middle" font-size="12" fill="#888780">未发送</text>
+      <rect x="700" y="390" width="100" height="40" rx="8" fill="#f1efe8" stroke="#888780" stroke-width="0.5"/>
+      <text x="750" y="410" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#5f5e5a">跳过等待</text>
+
+      <!-- 是 → 点击同意 -->
+      <line x1="420" y1="438" x2="420" y2="466" stroke="#888780" stroke-width="1.2" marker-end="url(#arr3)"/>
+      <text x="434" y="455" font-size="12" fill="#888780">已发送简历</text>
+
+      <!-- 点击同意 -->
+      <rect x="220" y="466" width="400" height="56" rx="12" fill="#e1f5ee" stroke="#0f6e56" stroke-width="0.5"/>
+      <text x="420" y="488" text-anchor="middle" dominant-baseline="central" font-size="14" font-weight="500" fill="#085041">点击【同意】</text>
+      <text x="420" y="508" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#0f6e56">简历自动进入邮箱</text>
+
+      <line x1="420" y1="522" x2="420" y2="550" stroke="#888780" stroke-width="1.2" marker-end="url(#arr3)"/>
+
+      <!-- 巡检 -->
+      <rect x="80" y="550" width="680" height="72" rx="12" fill="#e1f5ee" stroke="#0f6e56" stroke-width="0.5"/>
+      <text x="420" y="574" text-anchor="middle" dominant-baseline="central" font-size="14" font-weight="500" fill="#085041">回到BOSS平台进行巡检（A96）</text>
+      <text x="420" y="596" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#0f6e56">筛选：已打招呼 + 已发送简历 → 每天不定时回复感谢话术</text>
+      <rect x="710" y="556" width="44" height="20" rx="6" fill="#0f6e56" stroke="none"/>
+      <text x="732" y="566" text-anchor="middle" dominant-baseline="central" font-size="11" fill="#e1f5ee">A96</text>
+
+      <line x1="420" y1="622" x2="420" y2="646" stroke="#888780" stroke-width="1.2" marker-end="url(#arr3)"/>
+
+      <rect x="200" y="646" width="440" height="20" rx="10" fill="#faece7" stroke="#993c1d" stroke-width="0.5"/>
+      <text x="420" y="656" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#993c1d">后续进入 EHR 录入流程（A20）</text>
+    </svg>
+    <div class="nav-btns">
+      <button class="nav-btn" onclick="switchTab('main',document.querySelectorAll('.tab-btn')[0])">← 主流程总览</button>
+      <button class="nav-btn" onclick="switchTab('active',document.querySelectorAll('.tab-btn')[1])">← 主动打招呼场景</button>
+    </div>
+  </div>
+</div>
+
+<script>
+function switchTab(id, btn) {
+  document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('pane-' + id).classList.add('active');
+  if (btn) btn.classList.add('active');
+}
+</script>
+</body>
+</html>
